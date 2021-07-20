@@ -5,6 +5,7 @@
  */
 
 import { hasOwn, isArray, isIntegerKey, isObject } from "../shared/index"
+import { track, trigger } from "./effect";
 import { reactive, readonly } from "./reactive"
 
 function createGtter(isReadonly, shallow) {
@@ -12,8 +13,9 @@ function createGtter(isReadonly, shallow) {
     const value = Reflect.get(target, key)
     // 如果不是只读，那么就要收集依赖
     if (!isReadonly) {
-      console.log('收集依赖，用于后续更新');
-      console.log(target, key, reciver);
+      console.log(`track属性: ${key}`);
+      // console.log(target, key, reciver);
+      track(target, 'get,', key)
     }
     // 如果是浅代理，直接返回值
     if (shallow) return value
@@ -37,16 +39,18 @@ function createSetter(shallow) {
     // 2. 当目标是对象类型时候，如果属性已存在就是修改，否则就是新增
     // 3. 新增时要收集依赖，修改时要触发更新
     let isExistKey = isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key)
-    if (isExistKey) {
-      console.log('更新');
-      console.log(target, key, value, reciver);
-
-    } else {
-      console.log('修改');
-      console.log(target, key, value, reciver);
-    }
-    // 设置值
+    
+    // 先设置值
     const reslut = Reflect.set(target, key, value, reciver)
+
+    // 然后出发更新
+    if (!isExistKey) {
+      console.log(`trigger 新属性：${key}`);
+      trigger(target, 'add', key, value)
+    } else {
+      console.log(`trigger 旧属性：${key}的值`);
+      trigger(target, 'set', key, value, oldValue)
+    }
 
     return reslut
   }
@@ -56,7 +60,7 @@ function createSetter(shallow) {
 const get = createGtter(false, false) // 【非仅读】 和 【非浅层】 的 getter
 const shallowGet = createGtter(false, true) // 【非仅读】 和 【浅层】 的 getter
 const readonlyGet = createGtter(true, false) // 【仅读】 和 【非浅层】 的 getter
-const shallowReadonlyGet = createSetter(true, true) // 【仅读】 和 【浅层】 的 getter
+const shallowReadonlyGet = createGtter(true, true) // 【仅读】 和 【浅层】 的 getter
 
 const set = createSetter(false)
 const shallowSet = createSetter(true)
@@ -66,7 +70,7 @@ function readonlySet(target, key) {
   console.warn(`cannot set ${JSON.stringify(target)} on  key ${key} falied`)
 }
 
-export const mutableHandler = {
+export const reactiveHandler = {
   get,
   set
 }

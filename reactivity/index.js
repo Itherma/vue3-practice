@@ -5,6 +5,6 @@
  */
 export * from './reactive';
 
-export {effect} from './effect'
+export { effect } from './effect'
 
-export {ref} from './ref'
+export { ref } from './ref'

@@ -5,17 +5,16 @@
 -->
 # vue3-practice
 vue3练习
-vue3练习
 ## 从零手写Vue3响应式原理
-#### 一.响应式API实现
-#### 二.shared模块实现
-#### 三.createReactiveObject实现
-#### 四.effect实现
-#### 五.track依赖收集
-#### 六.trigger触发更新
-#### 七.实现Ref
-#### 八.实现toRefs
-#### 九.实现Computed
+#### 一. 响应式API实现
+#### 二. shared模块实现
+#### 三. createReactiveObject实现
+#### 四. effect实现
+#### 五. track依赖收集
+#### 六. trigger触发更新
+#### 七. 实现Ref
+#### 八. 实现toRefs
+#### 九. 实现Computed
 ## Vue3 响应式模块源码剖析
 ### 一.ReactiveAPI原理分析
 调试方法：
