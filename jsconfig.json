@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "baseUrl": "./",
+    "checkJs": true,
+    "paths": {
+      "/*": ["/*"],
+      "@/*": ["src/*"],
+      "@shared/*": ["shared/*"],
+      "@reactivity/*": ["reactivity/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
